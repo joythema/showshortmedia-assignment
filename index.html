@@ -1,45 +1,510 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="쇼숏미디어 과제 제출용 영상 포트폴리오">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="쇼숏미디어 과제 제출용 숏폼 포트폴리오" />
   <title>SHOWSHORT MEDIA | Assignment Portfolio</title>
-  <link rel="stylesheet" href="./styles.css">
+  <style>
+    :root{
+      --bg:#f7f6f2;
+      --panel:#ffffff;
+      --panel2:#f0efe9;
+      --text:#262626;
+      --muted:#6f6f6b;
+      --line:rgba(38,38,38,.12);
+      --accent:#6d7f32;
+    }
+
+    *{box-sizing:border-box}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at 85% 8%,rgba(109,127,50,.08),transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    .wrap{
+      width:min(1120px,calc(100% - 36px));
+      margin:0 auto;
+      padding:64px 0 48px;
+    }
+
+    .eyebrow{
+      color:var(--accent);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.15em;
+      margin:0 0 16px;
+    }
+
+    h1{
+      font-size:clamp(40px,7vw,82px);
+      line-height:1.02;
+      letter-spacing:-.055em;
+      margin:0;
+      max-width:860px;
+    }
+
+    .intro{
+      max-width:720px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.8;
+      margin:24px 0 44px;
+    }
+
+
+    .editor-info{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:-18px 0 40px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      color:#555552;
+      font-size:13px;
+      letter-spacing:.01em;
+    }
+
+    .editor-info .divider{
+      color:#9a9a93;
+    }
+
+    .editor-info a{
+      color:#555552;
+      text-decoration:none;
+    }
+
+    .editor-info a:hover{
+      color:var(--accent);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(280px,420px) 1fr;
+      gap:28px;
+      align-items:stretch;
+    }
+
+    .video-card,
+    .info-card,
+    .section{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:26px;
+    }
+
+    .video-card{
+      padding:12px;
+    }
+
+    .video-wrap{
+      position:relative;
+      width:100%;
+      aspect-ratio:9/16;
+      overflow:hidden;
+      border-radius:18px;
+      background:#ecebe5;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    video{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      background:#ecebe5;
+    }
+
+    /* 유튜브 쇼츠처럼 브라우저 기본 컨트롤 숨김 */
+    video::-webkit-media-controls{
+      display:none !important;
+    }
+
+    .control-btn{
+      position:absolute;
+      top:14px;
+      right:14px;
+      z-index:5;
+      width:42px;
+      height:42px;
+      border:1px solid rgba(38,38,38,.12);
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      color:#333333;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .control-btn:hover{
+      transform:scale(1.04);
+      background:rgba(255,255,255,.98);
+    }
+
+    .control-btn svg{
+      width:18px;
+      height:18px;
+      fill:currentColor;
+    }
+
+    .tap-hint{
+      position:absolute;
+      left:14px;
+      bottom:14px;
+      z-index:4;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.86);
+      border:1px solid rgba(38,38,38,.10);
+      color:#555552;
+      font-size:11px;
+      letter-spacing:.02em;
+      pointer-events:none;
+      transition:.25s ease;
+    }
+
+    .video-wrap.is-playing .tap-hint{
+      opacity:0;
+      transform:translateY(4px);
+    }
+
+    .info-card{
+      padding:34px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .label{
+      color:var(--accent);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.14em;
+      margin-bottom:10px;
+    }
+
+    h2{
+      font-size:clamp(28px,4vw,48px);
+      line-height:1.15;
+      letter-spacing:-.04em;
+      margin:0;
+    }
+
+    .summary{
+      color:#555552;
+      line-height:1.75;
+      margin:20px 0 30px;
+    }
+
+    .meta{
+      margin-top:auto;
+    }
+
+    .meta-row{
+      display:grid;
+      grid-template-columns:110px 1fr;
+      padding:15px 0;
+      border-top:1px solid var(--line);
+      gap:16px;
+      font-size:14px;
+    }
+
+    .meta-row span:first-child{
+      color:var(--muted);
+    }
+
+    .section{
+      margin-top:28px;
+      padding:34px;
+    }
+
+    .section h3{
+      font-size:24px;
+      margin:0 0 22px;
+      letter-spacing:-.02em;
+    }
+
+    .points{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+
+    .point{
+      padding:22px;
+      background:var(--panel2);
+      border:1px solid var(--line);
+      border-radius:18px;
+    }
+
+    .num{
+      color:var(--accent);
+      font-size:12px;
+      font-weight:800;
+      margin-bottom:13px;
+    }
+
+    .point h4{
+      font-size:18px;
+      margin:0 0 10px;
+    }
+
+    .point p{
+      font-size:14px;
+      line-height:1.7;
+      color:var(--muted);
+      margin:0;
+    }
+
+    .process{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .process p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    footer{
+      display:flex;
+      justify-content:space-between;
+      color:#8b8b85;
+      font-size:12px;
+      padding:28px 2px 0;
+    }
+
+    @media(max-width:820px){
+      .wrap{
+        width:min(100% - 24px,600px);
+        padding-top:42px;
+      }
+
+      .hero,
+      .points,
+      .process{
+        grid-template-columns:1fr;
+      }
+
+      .editor-info{
+        flex-wrap:wrap;
+        gap:8px;
+        margin-top:-16px;
+      }
+
+      .video-card{
+        max-width:430px;
+        width:100%;
+        margin:auto;
+      }
+
+      .info-card,
+      .section{
+        padding:25px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main class="page">
-    <header class="hero">
-      <p class="eyebrow">SHOWSHORT MEDIA · ASSIGNMENT</p>
-      <h1>과제 제출용<br>영상 포트폴리오</h1>
-      <p class="lead">쇼숏미디어 과제 제출을 위한 세로형 숏폼 영상 인덱스입니다.</p>
-    </header>
+  <main class="wrap">
+    <p class="eyebrow">SHOWSHORT MEDIA · ASSIGNMENT PORTFOLIO</p>
 
-    <section class="portfolio">
-      <div class="video-shell">
-        <video controls playsinline preload="metadata" poster="./assets/images/poster.jpg">
-          <source src="./assets/video/showshortmedia-assignment.mp4" type="video/mp4">
-          브라우저가 video 태그를 지원하지 않습니다.
-        </video>
+    <h1>
+      짧은 시간 안에<br>
+      시선을 붙잡는 숏폼 편집
+    </h1>
+
+    <p class="intro">
+      인물의 반응과 대사의 흐름이 빠르게 이어지는 소재를 세로형 숏폼 문법에 맞게 재구성했습니다.
+      첫 화면에서 주제를 즉시 이해시키고, 자막과 장면 전환을 통해 다음 내용을 계속 보게 만드는 데 중점을 두었습니다.
+    </p>
+
+    <div class="editor-info">
+      <span>Editor 김유진</span>
+      <span class="divider">|</span>
+      <span>E-mail <a href="mailto:joythema@gmail.com">joythema@gmail.com</a></span>
+    </div>
+
+    <section class="hero">
+      <div class="video-card">
+        <div class="video-wrap" id="videoWrap">
+          <video
+            id="portfolioVideo"
+            playsinline
+            preload="auto"
+            aria-label="쇼숏미디어 과제 영상"
+          >
+            <source src="./showshortmedia-assignment.mp4" type="video/mp4" />
+          </video>
+
+          <button class="control-btn" id="controlBtn" aria-label="재생">
+            <svg id="playIcon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+            <svg id="pauseIcon" viewBox="0 0 24 24" aria-hidden="true" style="display:none">
+              <path d="M6 5h4v14H6zm8 0h4v14h-4z"></path>
+            </svg>
+          </button>
+
+          <div class="tap-hint">영상 클릭 · 재생 / 일시정지</div>
+        </div>
       </div>
 
-      <div class="details">
-        <div>
-          <p class="label">PROJECT</p>
-          <h2>실물 보면 승마장 찾게 된다고</h2>
+      <div class="info-card">
+        <div class="label">PROJECT</div>
+        <h2>BTS 진, 실물 보면<br>승마장 찾게 된다고?</h2>
+
+        <p class="summary">
+          인터뷰와 리액션 컷을 빠르게 연결해 하나의 짧은 이야기처럼 보이도록 구성한 세로형 숏폼 작업입니다.
+          시청자가 처음 몇 초 안에 소재를 파악하고, 인물에 대한 반응이 어떻게 이어지는지 자연스럽게 따라가도록 편집했습니다.
+        </p>
+
+        <div class="meta">
+          <div class="meta-row"><span>Format</span><span>Vertical 9:16</span></div>
+          <div class="meta-row"><span>Runtime</span><span>약 38초</span></div>
+          <div class="meta-row"><span>Role</span><span>숏폼 구성 · 자막 · 컷 편집</span></div>
+          <div class="meta-row"><span>Preview</span><span>영상 25초 장면</span></div>
         </div>
-
-        <dl class="meta">
-          <div><dt>Format</dt><dd>Vertical Short-form · 9:16</dd></div>
-          <div><dt>Duration</dt><dd>00:38</dd></div>
-          <div><dt>Submission</dt><dd>SHOWSHORT MEDIA</dd></div>
-        </dl>
-
-        <p class="note">과제 제출 및 포트폴리오 확인을 위한 단일 프로젝트 페이지입니다.</p>
       </div>
     </section>
 
-    <footer><span>Portfolio Index</span><span>© 2026</span></footer>
+    <section class="section">
+      <div class="label">FOCUS POINT</div>
+      <h3>이 작업에서 중점을 둔 부분</h3>
+
+      <div class="points">
+        <article class="point">
+          <div class="num">01 · HOOK</div>
+          <h4>첫 화면에서 주제 전달</h4>
+          <p>
+            상단 헤드라인을 유지해 영상이 시작되자마자 핵심 소재를 이해할 수 있도록 구성했습니다.
+          </p>
+        </article>
+
+        <article class="point">
+          <div class="num">02 · SUBTITLE</div>
+          <h4>대사의 핵심만 빠르게 읽히게</h4>
+          <p>
+            인물의 말과 반응을 짧은 자막 단위로 보여줘 무음으로 보더라도 흐름을 놓치지 않도록 했습니다.
+          </p>
+        </article>
+
+        <article class="point">
+          <div class="num">03 · PACE</div>
+          <h4>반응이 이어지는 편집 리듬</h4>
+          <p>
+            서로 다른 인터뷰·리액션 장면을 짧게 연결해 정적인 구간을 줄이고 다음 컷에 대한 궁금증을 유지했습니다.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="label">EDITING APPROACH</div>
+      <h3>편집 방향</h3>
+
+      <div class="process">
+        <p>
+          원본 장면을 단순히 나열하기보다 같은 주제를 말하는 장면들을 하나의 흐름 안에 배치했습니다.
+          영상 전체에서 상단 헤드라인을 반복적으로 노출해 처음 유입된 시청자도 맥락을 바로 잡을 수 있도록 했습니다.
+        </p>
+
+        <p>
+          세로형 화면에서 인물과 자막이 동시에 읽히도록 시선 분산을 줄이고,
+          인물의 표정 변화와 대사의 타이밍이 맞물리도록 컷의 길이를 조절했습니다.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <span>SHOWSHORT MEDIA · Assignment Portfolio</span>
+      <span>2026</span>
+    </footer>
   </main>
+
+  <script>
+    const video = document.getElementById('portfolioVideo');
+    const wrap = document.getElementById('videoWrap');
+    const controlBtn = document.getElementById('controlBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+
+    const PREVIEW_TIME = 25;
+    let previewLoaded = false;
+    let firstPlay = true;
+
+    function showPlayState(isPlaying){
+      playIcon.style.display = isPlaying ? 'none' : 'block';
+      pauseIcon.style.display = isPlaying ? 'block' : 'none';
+      controlBtn.setAttribute('aria-label', isPlaying ? '일시정지' : '재생');
+      wrap.classList.toggle('is-playing', isPlaying);
+    }
+
+    // 별도 poster 이미지 없이 영상 자체의 25초 프레임을 첫 화면으로 표시
+    video.addEventListener('loadedmetadata', () => {
+      if (video.duration > PREVIEW_TIME) {
+        video.currentTime = PREVIEW_TIME;
+      }
+    });
+
+    video.addEventListener('seeked', () => {
+      if (!previewLoaded && Math.abs(video.currentTime - PREVIEW_TIME) < 1) {
+        previewLoaded = true;
+        video.pause();
+        showPlayState(false);
+      }
+    });
+
+    async function togglePlayback(){
+      if (video.paused) {
+        // 첫 재생만 0초부터 시작
+        if (firstPlay) {
+          firstPlay = false;
+          video.currentTime = 0;
+        }
+        try {
+          await video.play();
+        } catch(e) {}
+      } else {
+        video.pause();
+      }
+    }
+
+    // 영상 전체 클릭으로 재생/일시정지
+    wrap.addEventListener('click', (e) => {
+      togglePlayback();
+    });
+
+    controlBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlayback();
+    });
+
+    video.addEventListener('play', () => showPlayState(true));
+    video.addEventListener('pause', () => showPlayState(false));
+
+    video.addEventListener('ended', () => {
+      firstPlay = true;
+      if (video.duration > PREVIEW_TIME) {
+        video.currentTime = PREVIEW_TIME;
+      }
+      showPlayState(false);
+    });
+
+    showPlayState(false);
+  </script>
 </body>
 </html>
